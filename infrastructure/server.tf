@@ -26,15 +26,14 @@ resource "hcloud_server" "main" {
   }
 }
 
-# Optional: Reverse DNS (uncomment and update domain when ready)
-# resource "hcloud_rdns" "main_ipv4" {
-#   server_id  = hcloud_server.main.id
-#   ip_address = hcloud_server.main.ipv4_address
-#   dns_ptr    = "freudeambaden.de"
-# }
-#
-# resource "hcloud_rdns" "main_ipv6" {
-#   server_id  = hcloud_server.main.id
-#   ip_address = hcloud_server.main.ipv6_address
-#   dns_ptr    = "freudeambaden.de"
-# }
+resource "hcloud_rdns" "main_ipv4" {
+  server_id  = hcloud_server.main.id
+  ip_address = hcloud_server.main.ipv4_address
+  dns_ptr    = "freudeambaden.de"
+}
+
+resource "hcloud_rdns" "main_ipv6" {
+  server_id  = hcloud_server.main.id
+  ip_address = hcloud_server.main.ipv6_address
+  dns_ptr    = "freudeambaden.de"
+}
