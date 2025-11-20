@@ -26,14 +26,14 @@ resource "hcloud_server" "main" {
   }
 }
 
-resource "hcloud_rdns" "main_ipv4" {
-  server_id  = hcloud_server.main.id
-  ip_address = hcloud_server.main.ipv4_address
-  dns_ptr    = "freudeambaden.de"
-}
+# resource "hcloud_rdns" "main_ipv4" {
+#   server_id  = hcloud_server.main.id
+#   ip_address = hcloud_server.main.ipv4_address
+#   dns_ptr    = "freiwasser.org"
+# }
 
-resource "hcloud_rdns" "main_ipv6" {
-  server_id  = hcloud_server.main.id
-  ip_address = hcloud_server.main.ipv6_address
-  dns_ptr    = "freudeambaden.de"
-}
+# resource "hcloud_rdns" "main_ipv6" {
+#   server_id  = hcloud_server.main.id
+#   ip_address = hcloud_server.main.ipv6_address
+#   dns_ptr    = "freiwasser.org"
+# }

@@ -1,6 +1,8 @@
 ### Terraform Plan / Apply
 
 ```sh
+sops exec-env ./infrastructure/secrets.sops.yaml 'terraform -chdir=infrastructure init'
+
     # Plan changes
 sops exec-env ./infrastructure/secrets.sops.yaml 'terraform -chdir=infrastructure plan'
 

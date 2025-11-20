@@ -1,4 +1,6 @@
-    🗺️ MVP ARCHITECTURE: EUROPE ONLY (modular for future regions)
+let’s architect a Europe-first MVP, with a built-in path to add more regions later (for paid users) without refactoring the entire stack.
+
+🗺️ MVP ARCHITECTURE: EUROPE ONLY (modular for future regions)
 Goal
 
 ✔️ Start with Europe only → cheapest dataset, fastest import

@@ -19,39 +19,44 @@ output "server_status" {
   value       = hcloud_server.main.status
 }
 
+# Domain and subdomain configuration
+output "domain" {
+  description = "Base domain"
+  value       = var.domain
+}
+
+output "subdomains" {
+  description = "Configured subdomains"
+  value       = [for subdomain in var.subdomains : "${subdomain}.${var.domain}"]
+}
+
+output "reverse_proxy" {
+  description = "Configured reverse proxy"
+  value       = var.reverse_proxy
+}
+
 # Instructions for manual DNS setup
 output "dns_setup_instructions" {
   description = "Instructions for setting up DNS in Namecheap"
   value = <<-EOT
     
-    To configure DNS in Namecheap:
+    To configure DNS in Namecheap for ${var.domain}:
     
     1. Go to Namecheap Dashboard → Domain List → Manage → Advanced DNS
     2. Add the following records:
     
-       For ROOT DOMAIN (yourdomain.com):
-       Type: A Record
-       Host: @ 
-       Value: ${hcloud_server.main.ipv4_address}
-       TTL: 300 (5 minutes) or Automatic
+       ROOT DOMAIN (@):
+       Type: A Record, Host: @, Value: ${hcloud_server.main.ipv4_address}
+       Type: AAAA Record, Host: @, Value: ${hcloud_server.main.ipv6_address}
        
-       Type: AAAA Record
-       Host: @
-       Value: ${hcloud_server.main.ipv6_address}
-       TTL: 300 (5 minutes) or Automatic
+       ${join("\n       ", [for subdomain in var.subdomains : 
+         "SUBDOMAIN (${subdomain}):\n       Type: A Record, Host: ${subdomain}, Value: ${hcloud_server.main.ipv4_address}\n       Type: AAAA Record, Host: ${subdomain}, Value: ${hcloud_server.main.ipv6_address}"])}
     
-       For SUBDOMAIN (api.yourdomain.com):
-       Type: A Record
-       Host: api
-       Value: ${hcloud_server.main.ipv4_address}
-       TTL: 300 (5 minutes) or Automatic
-       
-       Type: AAAA Record
-       Host: api
-       Value: ${hcloud_server.main.ipv6_address}
-       TTL: 300 (5 minutes) or Automatic
+    3. TTL: 300 (5 minutes) or Automatic
+    4. Wait for DNS propagation (usually 5-30 minutes)
+    5. Test with: dig ${var.domain} or dig api.${var.domain}
     
-    3. Wait for DNS propagation (usually 5-30 minutes)
-    4. Test with: dig yourdomain.com (or dig api.yourdomain.com)
+    Configured subdomains:
+    ${join("\n    ", [for subdomain in var.subdomains : "- ${subdomain}.${var.domain}"])}
   EOT
 }
