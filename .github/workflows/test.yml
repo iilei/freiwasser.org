@@ -3,6 +3,9 @@
 #
 name: Tests
 on:
+  workflow_dispatch:
+    branches:
+      - master
   pull_request:
     paths-ignore:
       - 'README.md'
@@ -111,14 +114,14 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v4
 
-    - name: Get dependencies
-      run: |
-        go mod download
+    # - name: Get dependencies
+    #   run: |
+    #     go mod download
 
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+    # - name: Upload coverage reports to Codecov
+    #   uses: codecov/codecov-action@v5
+    #   with:
+    #     token: ${{ secrets.CODECOV_TOKEN }}
 
 
   # verify CLI tool and pre-commit integration
@@ -138,9 +141,9 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v4
 
-    - name: Get dependencies
-      run: |
-        go mod download
+    # - name: Get dependencies
+    #   run: |
+    #     go mod download
 
     # - name: Build CLI
     #   run: |
