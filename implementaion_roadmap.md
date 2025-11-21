@@ -21,7 +21,7 @@ osm-stack/
  │   └─ world.toml           ← future, optional
  │
  ├─ api/
- │   └─ go-server/          
+ │   └─ go-server/
  │
  ├─ auth/                    ← authentik / JWT claims
  │

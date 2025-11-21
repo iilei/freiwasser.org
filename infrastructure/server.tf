@@ -4,13 +4,13 @@ resource "hcloud_server" "main" {
   server_type = "cx33"  # 4 vCPU, 8GB RAM
   image       = "ubuntu-24.04"
   location    = "nbg1"  # Nuremberg
-  
+
   # Default settings to match imported server
   allow_deprecated_images    = false
   ignore_remote_firewall_ids = false
   keep_disk                  = false
   shutdown_before_deletion   = false
-  
+
   public_net {
     ipv4_enabled = true
     ipv6_enabled = true

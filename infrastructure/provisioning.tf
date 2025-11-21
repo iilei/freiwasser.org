@@ -9,14 +9,14 @@
 
 # resource "null_resource" "server_provisioning" {
 #   depends_on = [hcloud_firewall_attachment.osm_server]
-#   
+#
 #   connection {
 #     type        = "ssh"
 #     host        = hcloud_server.main.ipv4_address
 #     user        = "root"
 #     private_key = file("~/.ssh/id_rsa")
 #   }
-#   
+#
 #   provisioner "remote-exec" {
 #     inline = [
 #       "apt-get update",
@@ -24,7 +24,7 @@
 #       "echo 'Server provisioned successfully'"
 #     ]
 #   }
-#   
+#
 #   triggers = {
 #     server_id = hcloud_server.main.id
 #   }

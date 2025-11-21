@@ -1,0 +1,142 @@
+# Visit https://goreleaser.com for documentation on how to customize this
+# behavior.
+version: 2
+
+# Define project variables for reusability
+project_name: nachbartisch
+
+# Note: We derive the CLI name by removing the 'terraform-provider-' prefix and adding `-validator` suffix.
+# CLI binary name: nachbartisch_{version}
+# Provider binary name: nachbartisch_{version}
+
+env:
+  - CLI_NAME=nachbartisch
+
+
+before:
+  hooks:
+    # this is just an example and not a requirement for provider building/publishing
+    - go mod tidy
+builds:
+- id: provider
+  env:
+    # goreleaser does not work with CGO, it could also complicate
+    # usage by users in CI/CD systems like Terraform Cloud where
+    # they are unable to install libraries.
+    - CGO_ENABLED=0
+  mod_timestamp: '{{ .CommitTimestamp }}'
+  flags:
+    - -trimpath
+  ldflags:
+    - '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}}'
+  goos:
+    - freebsd
+    - windows
+    - linux
+    - darwin
+  goarch:
+    - amd64
+    - '386'
+    - arm
+    - arm64
+  ignore:
+    - goos: darwin
+      goarch: '386'
+    - goos: windows
+      goarch: arm
+    - goos: windows
+      goarch: arm64
+  binary: '{{ .ProjectName }}_v{{ .Version }}'
+- id: cli
+  main: ./cmd/{{ .Env.CLI_NAME }}
+  env:
+    - CGO_ENABLED=0
+  mod_timestamp: '{{ .CommitTimestamp }}'
+  flags:
+    - -trimpath
+  ldflags:
+    - '-s -w -X main.version={{.Version}}'
+  goos:
+    - freebsd
+    - windows
+    - linux
+    - darwin
+  goarch:
+    - amd64
+    - '386'
+    - arm
+    - arm64
+  ignore:
+    - goos: darwin
+      goarch: '386'
+    - goos: windows
+      goarch: arm
+    - goos: windows
+      goarch: arm64
+  binary: '{{ .Env.CLI_NAME }}'
+archives:
+- id: provider
+  builds:
+    - provider
+  formats: ["zip"]
+  name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+
+checksum:
+  name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
+  algorithm: sha256
+
+changelog:
+  use: github
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - '^ci:'
+      - 'README'
+      - 'Merge pull request'
+      - 'Merge branch'
+  groups:
+    - title: '⚠️ Breaking Changes'
+      regexp: "^.*!(\\(.*\\))?:.*$"
+      order: 0
+    - title: 'Features'
+      regexp: "^.*feat(\\(.*\\))?:.*$"
+      order: 1
+    - title: 'Bug Fixes'
+      regexp: "^.*fix(\\(.*\\))?:.*$"
+      order: 2
+    - title: 'Performance Improvements'
+      regexp: "^.*perf(\\(.*\\))?:.*$"
+      order: 3
+    - title: 'Refactoring'
+      regexp: "^.*refactor(\\(.*\\))?:.*$"
+      order: 4
+    - title: 'Documentation'
+      regexp: "^.*docs(\\(.*\\))?:.*$"
+      order: 5
+    - title: 'Other Changes'
+      order: 999
+
+release:
+  # Set to true if you want to disable the release
+  # This is useful if you want to create the release manually
+  draft: false
+  # Set to true to create a prerelease
+  prerelease: auto
+  # Set to true to make the release editable
+  make_latest: false
+
+signs:
+  - artifacts: checksum
+    args:
+      # if you are using this in a GitHub action or some other automated pipeline, you
+      # need to pass the batch flag to indicate its not interactive.
+      - "--batch"
+      - "--local-user"
+      - "{{ .Env.GPG_FINGERPRINT }}" # set this environment variable for your signing key
+      - "--output"
+      - "${signature}"
+      - "--detach-sign"
+      - "${artifact}"
