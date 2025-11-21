@@ -11,25 +11,7 @@ variable "HCLOUD_API_KEY" {
   description = "Hetzner Cloud API Key"
   type        = string
   sensitive   = true
-}
-
-variable "SSH__SSH_ID_ED25519_HCLOUD_FREIWASSER_ORG_SECRET_SECRET" {
-  description = "SSH secret key secret"
-  type        = string
-  sensitive   = true
-}
-
-variable "SSH__SSH_ID_ED25519_HCLOUD_FREIWASSER_ORG_PUB" {
-  description = "SSH public key"
-  type        = string
-  sensitive   = true
-}
-
-variable "SSH__SSH_ID_ED25519_HCLOUD_FREIWASSER_ORG_SECRET_KEY" {
-  description = "SSH private key"
-  type        = string
-  sensitive   = true
-}
+}}
 
 variable "domain" {
   description = "Base domain for the application"
