@@ -31,4 +31,4 @@ After running `terraform apply`:
    - **Value**: `<server-ipv6-from-terraform>`
    - **TTL**: Automatic
 5. Wait 5-30 minutes for DNS propagation
-6. Test: `dig api.yourdomain.com` 
+6. Test: `dig api.yourdomain.com`

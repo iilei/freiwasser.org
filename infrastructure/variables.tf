@@ -46,7 +46,7 @@ variable "subdomains" {
 variable "ssh_public_key_path" {
   description = "Path to SSH public key for server access"
   type        = string
-  default     = "~/.ssh/id_ed25519_hcloud_freiwasser.org.pub"
+  default     = "~/.ssh/id_ed25519_hetzner_20251121.pub"
 }
 
 variable "reverse_proxy" {
